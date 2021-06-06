@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
 # Re-create build directory tree
-rm -fr build
-mkdir build
-mkdir build/debug
-mkdir build/release
+mkdir -p build
+mkdir -p build/debug
+mkdir -p build/release
 
 # Perform debug build
 cd build/debug
