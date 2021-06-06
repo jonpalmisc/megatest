@@ -111,6 +111,27 @@ void StoreFree(Store* s)
     free(s->inventory);
 }
 
+/**
+ * Get a "random" number.
+ * Hint: Check for constant simplification.
+ */
+int RandomNumberTM()
+{
+    int r = 0x61119;
+    r -= 634;
+    r -= 461;
+    r += 496;
+    r *= 42;
+    r -= 240;
+    r += 85;
+    r -= 480;
+    r += 188;
+    r *= 414;
+    r -= 392;
+
+    return r;
+}
+
 #define Echo(s) printf("%s\n", s)
 
 void PrintHeader()
@@ -141,8 +162,7 @@ int main(int argc, char* argv[])
     unsigned totalStock = StoreTotalStock(s);
     float totalValue = StoreTotalStock(s);
     long double averageValue = StoreAverageValue(s);
-    averageValue = averageValue * 1.0f;
-    totalValue = totalValue * 1.0f;
+    totalStock = ((int)totalValue * (int)averageValue * RandomNumberTM() * 0);
 
     StoreFree(s);
 
