@@ -1,4 +1,4 @@
-MEGATEST: Disassembler test binary                                       v0.1.0
+MEGATEST: Disassembler test binary                                       v0.1.2
 ________________________________________________________________________________
 
 ABOUT
@@ -15,7 +15,11 @@ BUILD
     $ make
 
   Additionally, you may want to use the -DCMAKE_BUILD_TYPE option to adjust the
-  amount of optimization, etc.
+  amount of optimization, etc. If you would prefer to quickly build debug,
+  release, and stripped binaries all at once, you can use the included scripts:
+
+    $ ./clean.sh
+    $ ./make.sh
 
 LICENSE
 
