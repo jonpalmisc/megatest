@@ -86,6 +86,20 @@ float StoreTotalValue(Store* s)
 }
 
 /**
+ * Calculate the average value of the store.
+ * Hint: This should produce x87 floating point operations on x86.
+ */
+long double StoreAverageValue(Store *s)
+{
+    long double total = 0.0;
+
+    for (unsigned i = 0; i < s->products; i++)
+        total += (long double)s->inventory[i]->price;
+
+    return total / (long double)s->products;
+}
+
+/**
  * Free all of the products in the store.
  * Hint: Inspect for HLIL array detection.
  */
@@ -126,6 +140,8 @@ int main(int argc, char* argv[])
 
     unsigned totalStock = StoreTotalStock(s);
     float totalValue = StoreTotalStock(s);
+    long double averageValue = StoreAverageValue(s);
+    averageValue = averageValue * 1.0f;
     totalValue = totalValue * 1.0f;
 
     StoreFree(s);
