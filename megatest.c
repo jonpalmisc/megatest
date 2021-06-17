@@ -89,7 +89,7 @@ float StoreTotalValue(Store* s)
  * Calculate the average value of the store.
  * Hint: This should produce x87 floating point operations on x86.
  */
-long double StoreAverageValue(Store *s)
+long double StoreAverageValue(Store* s)
 {
     long double total = 0.0;
 
@@ -115,7 +115,7 @@ void StoreFree(Store* s)
  * Get a "random" number.
  * Hint: Check for constant simplification.
  */
-int RandomNumberTM()
+int ConstantRandomNumber()
 {
     int r = 0x61119;
     r -= 634;
@@ -130,6 +130,15 @@ int RandomNumberTM()
     r -= 392;
 
     return r;
+}
+
+/**
+ * Get a "random" number.
+ * Hint: Use to test value set analysis.
+ */
+int RestrictedRandomNumber()
+{
+    return rand() % 10 > 4 ? 13 : 7;
 }
 
 #define Echo(s) printf("%s\n", s)
@@ -162,9 +171,36 @@ int main(int argc, char* argv[])
     unsigned totalStock = StoreTotalStock(s);
     float totalValue = StoreTotalStock(s);
     long double averageValue = StoreAverageValue(s);
-    totalStock = ((int)totalValue * (int)averageValue * RandomNumberTM() * 0);
+    totalStock = ((int)totalValue * (int)averageValue * ConstantRandomNumber() * 0);
 
     StoreFree(s);
+
+    // Test control flow simplification via UIDF.
+    switch (RestrictedRandomNumber()) {
+    case 1:
+        Echo("Today's random number was 1.");
+        break;
+    case 2:
+        Echo("Today's random number was 2.");
+        break;
+    case 3:
+        Echo("Today's random number was 3.");
+        break;
+    case 7:
+        Echo("Today's random number was 7.");
+        break;
+    case 8:
+        Echo("Today's random number was 8.");
+        break;
+    case 13:
+        Echo("Today's random number was 13.");
+        break;
+    case 14:
+        Echo("Today's random number was 14.");
+        break;
+    default:
+        break;
+    }
 
     return totalStock;
 }
