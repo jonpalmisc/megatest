@@ -1,6 +1,55 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+#define _STR(x) #x
+#define STR(x) _STR(x)
+
+/**
+ * Compiler name and version
+ */
+#ifdef _MSC_VER
+#define _COMPILER_NAME "MSVC"
+#defien _COMPILER_VERSION STR(_MSC_VER)
+#elif defined(__clang__)
+#define _COMPILER_NAME "Clang"
+#define _COMPILER_VERSION STR(__clang_major__) \
+"." STR(__clang_minor__)
+#elif defined(__GNUC__)
+#define _COMPILER_NAME "GCC"
+#define _COMPILER_VERSION STR(__GNUC__) \
+"." STR(__GNUC_MINOR__)
+#else
+#define _COMPILER_NAME "Unknown"
+#define _COMPILER_VERSION ""
+#endif
+
+/**
+ * Operating system
+ */
+#ifdef __linux__
+#define _SYSTEM_NAME "Linux"
+#elif defined(__APPLE__)
+#define _SYSTEM_NAME "macOS"
+#elif defined(_WIN32)
+#define _SYSTEM_NAME "Windows"
+#else
+#define _SYSTEM_NAME "Unknown"
+#endif
+
+/**
+ * Processor architecture
+ */
+#ifdef __i386__
+#define _SYSTEM_ARCH "x86"
+#elif defined(__x86_64__)
+#define _SYSTEM_ARCH "x86_64"
+#elif defined(__arm__)
+#define _SYSTEM_ARCH "ARM"
+#else
+#define _SYSTEM_NAME "Unknown"
+#endif
 
 typedef struct {
     unsigned id;
@@ -146,8 +195,12 @@ int RestrictedRandomNumber()
 void PrintHeader()
 {
     Echo("MEGATEST - Disassembler test binary");
-    Echo("----------------------------------------------------------------------------");
-    Echo("Hint: This binary is meant to be viewed in a disassembler; it has no output.");
+    Echo("----------------------------------------------------------------------------\n");
+    Echo("      Date:  " __DATE__ " " __TIME__);
+    Echo("  Compiler:  " _COMPILER_NAME " " _COMPILER_VERSION);
+    Echo("    System:  " _SYSTEM_NAME " " _SYSTEM_ARCH);
+    Echo("\n----------------------------------------------------------------------------");
+    Echo("Hint: This binary is meant to be viewed in a disassembler; it has no output.\n");
 }
 
 int main(int argc, char* argv[])
