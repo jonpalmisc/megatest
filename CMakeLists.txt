@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(megetest)
+project(megatest)
 
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fno-inline")
 
