@@ -10,6 +10,9 @@ cd build/debug
 cmake ../../ -DCMAKE_BUILD_TYPE=Debug
 make
 
+# Rename to include "_debug" for clarity amongst others
+mv megatest megatest_debug
+
 # Perform release build
 cd ../release
 cmake ../../ -DCMAKE_BUILD_TYPE=Release
