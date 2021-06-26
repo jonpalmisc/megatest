@@ -187,7 +187,7 @@ int ConstantRandomNumber()
  */
 int RestrictedRandomNumber()
 {
-    return rand() % 10 > 4 ? 13 : 7;
+    return rand() % 2 == 0 ? 13 : 7;
 }
 
 #define Echo(s) printf("%s\n", s)
@@ -209,6 +209,8 @@ int main(int argc, char* argv[])
 
     if (argc > 1)
         return (long long)&argv[1];
+
+    srand(time(NULL));
 
     Store* s = StoreCreate(5);
 
