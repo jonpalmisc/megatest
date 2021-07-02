@@ -10,45 +10,45 @@
  * Compiler name and version
  */
 #ifdef _MSC_VER
-#define _COMPILER_NAME "MSVC"
-#define _COMPILER_VERSION STR(_MSC_VER)
+#define MT_COMPILER_NAME "MSVC"
+#define MT_COMPILER_VERSION STR(_MSC_VER)
 #elif defined(__clang__)
-#define _COMPILER_NAME "Clang"
-#define _COMPILER_VERSION STR(__clang_major__) \
+#define MT_COMPILER_NAME "Clang"
+#define MT_COMPILER_VERSION STR(__clang_major__) \
 "." STR(__clang_minor__)
 #elif defined(__GNUC__)
-#define _COMPILER_NAME "GCC"
-#define _COMPILER_VERSION STR(__GNUC__) \
+#define MT_COMPILER_NAME "GCC"
+#define MT_COMPILER_VERSION STR(__GNUC__) \
 "." STR(__GNUC_MINOR__)
 #else
-#define _COMPILER_NAME "Unknown"
-#define _COMPILER_VERSION ""
+#define MT_COMPILER_NAME "Unknown"
+#define MT_COMPILER_VERSION ""
 #endif
 
 /**
  * Operating system
  */
 #ifdef __linux__
-#define _SYSTEM_NAME "Linux"
+#define MT_SYSTEM_NAME "Linux"
 #elif defined(__APPLE__)
-#define _SYSTEM_NAME "macOS"
+#define MT_SYSTEM_NAME "macOS"
 #elif defined(_WIN32)
-#define _SYSTEM_NAME "Windows"
+#define MT_SYSTEM_NAME "Windows"
 #else
-#define _SYSTEM_NAME "Unknown"
+#define MT_SYSTEM_NAME "Unknown"
 #endif
 
 /**
  * Processor architecture
  */
 #ifdef __i386__
-#define _SYSTEM_ARCH "x86"
+#define MT_SYSTEM_ARCH "x86"
 #elif defined(__x86_64__)
-#define _SYSTEM_ARCH "x86_64"
+#define MT_SYSTEM_ARCH "x86_64"
 #elif defined(__arm__)
-#define _SYSTEM_ARCH "ARM"
+#define MT_SYSTEM_ARCH "ARM"
 #else
-#define _SYSTEM_NAME "Unknown"
+#define MT_SYSTEM_ARCH "Unknown"
 #endif
 
 typedef struct {
@@ -197,8 +197,8 @@ void PrintHeader()
     Echo("MEGATEST - Disassembler test binary");
     Echo("----------------------------------------------------------------------------\n");
     Echo("      Date:  " __DATE__ " " __TIME__);
-    Echo("  Compiler:  " _COMPILER_NAME " " _COMPILER_VERSION);
-    Echo("    System:  " _SYSTEM_NAME " " _SYSTEM_ARCH);
+    Echo("  Compiler:  " MT_COMPILER_NAME " " MT_COMPILER_VERSION);
+    Echo("    System:  " MT_SYSTEM_NAME " " MT_SYSTEM_ARCH);
     Echo("\n----------------------------------------------------------------------------");
     Echo("Hint: This binary is meant to be viewed in a disassembler; it has no output.\n");
 }
