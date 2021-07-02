@@ -73,6 +73,7 @@ Product* ProductCreate(unsigned id, float price, unsigned stock)
 }
 
 typedef struct {
+    char* name;
     unsigned products;
     unsigned capacity;
     Product** inventory;
@@ -86,6 +87,7 @@ Store* StoreCreate(unsigned int productLimit)
 {
     Store* s = (Store*)malloc(sizeof(Store));
 
+    s->name = "Untitled Store";
     s->products = 0;
     s->capacity = productLimit;
     s->inventory = (Product**)malloc(s->capacity * sizeof(Product*));
