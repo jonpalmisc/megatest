@@ -11,7 +11,7 @@
  */
 #ifdef _MSC_VER
 #define _COMPILER_NAME "MSVC"
-#defien _COMPILER_VERSION STR(_MSC_VER)
+#define _COMPILER_VERSION STR(_MSC_VER)
 #elif defined(__clang__)
 #define _COMPILER_NAME "Clang"
 #define _COMPILER_VERSION STR(__clang_major__) \
