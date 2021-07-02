@@ -29,3 +29,8 @@ jobs:
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: ${{github.workspace}}/build/
