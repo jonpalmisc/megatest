@@ -12,11 +12,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, ubuntu-latest]
         include:
           - os: windows-latest
             compiler: cl
             target: Windows
+          - os: ubuntu-latest
+            compiler: gcc-10
+            target: Linux
 
     steps:
     - uses: actions/checkout@v2
