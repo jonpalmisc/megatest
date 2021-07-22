@@ -14,12 +14,14 @@
 #define MT_COMPILER_VERSION STR(_MSC_VER)
 #elif defined(__clang__)
 #define MT_COMPILER_NAME "Clang"
-#define MT_COMPILER_VERSION STR(__clang_major__) \
-"." STR(__clang_minor__)
+#define MT_COMPILER_VERSION \
+    STR(__clang_major__)    \
+    "." STR(__clang_minor__)
 #elif defined(__GNUC__)
 #define MT_COMPILER_NAME "GCC"
-#define MT_COMPILER_VERSION STR(__GNUC__) \
-"." STR(__GNUC_MINOR__)
+#define MT_COMPILER_VERSION \
+    STR(__GNUC__)           \
+    "." STR(__GNUC_MINOR__)
 #else
 #define MT_COMPILER_NAME "Unknown"
 #define MT_COMPILER_VERSION ""
