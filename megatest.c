@@ -80,10 +80,10 @@ typedef struct {
 } Store;
 
 /**
- * Allocate and initialize a new Store instance
+ * Allocate and initialize a new Store instance.
  * Hint: Inspect for proper structure representation.
  */
-Store* StoreCreate(unsigned int productLimit)
+Store* StoreCreate(unsigned productLimit)
 {
     Store* s = (Store*)malloc(sizeof(Store));
 
@@ -93,6 +93,18 @@ Store* StoreCreate(unsigned int productLimit)
     s->inventory = (Product**)malloc(s->capacity * sizeof(Product*));
 
     return s;
+}
+
+/**
+ * Initialize an already-allocated Store instance.
+ * Hint: Inspect for proper structure representation.
+ */
+void StoreInit(Store* s, unsigned productLimit)
+{
+    s->name = "Untitled Store";
+    s->products = 0;
+    s->capacity = productLimit;
+    s->inventory = (Product**)malloc(s->capacity * sizeof(Product*));
 }
 
 /**
@@ -214,23 +226,26 @@ int main(int argc, char* argv[])
 
     srand(time(NULL));
 
-    Store* s = StoreCreate(5);
+    Store* s1 = StoreCreate(5);
 
     Product* p1 = ProductCreate(1, 2.97f, 8);
-    StoreAddProduct(s, p1);
+    StoreAddProduct(s1, p1);
 
     Product* p2 = ProductCreate(2, 3.83, 14);
-    StoreAddProduct(s, p2);
+    StoreAddProduct(s1, p2);
+
+    Store s2;
+    StoreInit(&s2, 3);
 
     Product* p3 = ProductCreate(3, 1.48, 6);
-    StoreAddProduct(s, p3);
+    StoreAddProduct(s1, p3);
 
-    unsigned totalStock = StoreTotalStock(s);
-    float totalValue = StoreTotalStock(s);
-    long double averageValue = StoreAverageValue(s);
+    unsigned totalStock = StoreTotalStock(s1);
+    float totalValue = StoreTotalStock(s1);
+    long double averageValue = StoreAverageValue(s1);
     totalStock = ((int)totalValue * (int)averageValue * ConstantRandomNumber() * 0);
 
-    StoreFree(s);
+    StoreFree(s1);
 
     // Test control flow simplification via UIDF.
     switch (RestrictedRandomNumber()) {
