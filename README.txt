@@ -1,4 +1,4 @@
-MEGATEST: Disassembler test binary                                        v0.3.0
+MEGATEST: Disassembler test binary                                        v0.3.1
 ________________________________________________________________________________
 
 ABOUT
@@ -23,4 +23,4 @@ BUILD
 
 LICENSE
 
-  Public Domain - See LICENSE.txt for more details.
+  Copyright (c) 2021 Jon Palmisciano, licensed under the BSD-3-Clause License.
