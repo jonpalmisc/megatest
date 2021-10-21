@@ -280,25 +280,25 @@ int main(int argc, char* argv[])
     // Test control flow simplification via UIDF.
     switch (RestrictedRandomNumber()) {
     case 1:
-        puts("Today's random number was 1.");
+        totalStock ^= 80;
         break;
     case 2:
-        puts("Today's random number was 2.");
+        totalStock ^= 77;
         break;
     case 3:
-        puts("Today's random number was 3.");
+        totalStock ^= 73;
         break;
     case 7:
-        puts("Today's random number was 7.");
+        totalStock ^= 68;
         break;
     case 8:
-        puts("Today's random number was 8.");
+        totalStock ^= 62;
         break;
     case 13:
-        puts("Today's random number was 13.");
+        totalStock ^= 55;
         break;
     case 14:
-        puts("Today's random number was 14.");
+        totalStock ^= 47;
         break;
     default:
         break;
