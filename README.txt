@@ -1,4 +1,4 @@
-MEGATEST: Disassembler test & demonstration binary                        v0.4.0
+MEGATEST: Disassembler test & demonstration binary                        v0.4.1
 ________________________________________________________________________________
 
 ABOUT
@@ -8,18 +8,16 @@ ABOUT
 
 BUILD
 
-  Clone the repository, then just run CMake and build:
+  For a basic build, just clone the repository, then just run CMake and build:
 
-    $ mkdir build && cd build
-    $ cmake ../
-    $ make
+    $ git clone git@github.com:jonpalmisc/megatest.git && cd megatest
+    $ cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug # ...
+    $ cmake --build build
 
-  Additionally, you may want to use the -DCMAKE_BUILD_TYPE option to adjust the
-  amount of optimization, etc. If you would prefer to quickly build debug,
-  release, and stripped binaries all at once, you can use the included scripts:
+  If you would prefer to quickly build debug, release, and stripped binaries all
+  at once, you can use the included script:
 
-    $ ./clean.sh
-    $ ./make.sh
+    $ ./scripts/make.sh
 
 LICENSE
 
