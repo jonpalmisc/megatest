@@ -8,7 +8,7 @@ execute_process(COMMAND git log -1 --format=%h
   OUTPUT_VARIABLE GIT_HASH
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-add_executable(megatest megatest.c)
+add_executable(megatest src/megatest.c)
 target_compile_features(megatest PRIVATE c_std_99)
 target_compile_definitions(megatest PRIVATE MT_COMMIT="${GIT_HASH}")
 
