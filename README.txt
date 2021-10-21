@@ -1,4 +1,4 @@
-MEGATEST: Disassembler test binary                                        v0.3.1
+MEGATEST: Disassembler test & demonstration binary                        v0.4.0
 ________________________________________________________________________________
 
 ABOUT
