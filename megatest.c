@@ -40,12 +40,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-// I probably found this on Stack Overflow; I don't completely remember why it
-// is relevant or needed, but here it is.
+//===-- Preprocessor abuse ------------------------------------------------===//
+
 #define _STR(x) #x
 #define STR(x) _STR(x)
-
-//===-- Preprocessor abuse ------------------------------------------------===//
 
 /* Build commit */
 #ifndef MT_COMMIT
@@ -94,215 +92,204 @@
 //===-- Core program ------------------------------------------------------===//
 
 typedef struct {
-    unsigned id;
-    float price;
-    unsigned stock;
+  unsigned id;
+  float price;
+  unsigned stock;
 } Product;
+
+typedef struct {
+  char *name;
+  unsigned products;
+  unsigned capacity;
+  Product **inventory;
+} Store;
 
 /**
  * Allocate and initialize a new Product instance.
  * Hint: Inspect for proper structure representation.
  */
-Product* ProductCreate(unsigned id, float price, unsigned stock)
-{
-    Product* p = (Product*)malloc(sizeof(Product));
+Product *ProductCreate(unsigned id, float price, unsigned stock) {
+  Product *p = (Product *)malloc(sizeof(Product));
 
-    p->id = id;
-    p->price = price;
-    p->stock = stock;
+  p->id = id;
+  p->price = price;
+  p->stock = stock;
 
-    return p;
+  return p;
 }
-
-typedef struct {
-    char* name;
-    unsigned products;
-    unsigned capacity;
-    Product** inventory;
-} Store;
 
 /**
  * Allocate and initialize a new Store instance.
  * Hint: Inspect for proper structure representation.
  */
-Store* StoreCreate(unsigned productLimit)
-{
-    Store* s = (Store*)malloc(sizeof(Store));
+Store *StoreCreate(unsigned productLimit) {
+  Store *s = (Store *)malloc(sizeof(Store));
 
-    s->name = "Untitled Store";
-    s->products = 0;
-    s->capacity = productLimit;
-    s->inventory = (Product**)malloc(s->capacity * sizeof(Product*));
+  s->name = "Untitled Store";
+  s->products = 0;
+  s->capacity = productLimit;
+  s->inventory = (Product **)malloc(s->capacity * sizeof(Product *));
 
-    return s;
+  return s;
 }
 
 /**
  * Initialize an already-allocated Store instance.
  * Hint: Inspect for proper structure representation.
  */
-void StoreInit(Store* s, unsigned productLimit)
-{
-    s->name = "Untitled Store";
-    s->products = 0;
-    s->capacity = productLimit;
-    s->inventory = (Product**)malloc(s->capacity * sizeof(Product*));
+void StoreInit(Store *s, unsigned productLimit) {
+  s->name = "Untitled Store";
+  s->products = 0;
+  s->capacity = productLimit;
+  s->inventory = (Product **)malloc(s->capacity * sizeof(Product *));
 }
 
 /**
  * Add a product to the store's inventory.
  * Hint: Inspect for HLIL array detection and structure member access.
  */
-bool StoreAddProduct(Store* s, Product* p)
-{
-    if (s->products >= s->capacity)
-        return false;
+bool StoreAddProduct(Store *s, Product *p) {
+  if (s->products >= s->capacity)
+    return false;
 
-    s->inventory[s->products++] = p;
-    return true;
+  s->inventory[s->products++] = p;
+  return true;
 }
 
 /**
  * Calculate the total stock of the store.
  * Hint: Inspect for HLIL array detection and structure member access.
  */
-unsigned StoreTotalStock(Store* s)
-{
-    unsigned total = 0;
+unsigned StoreTotalStock(Store *s) {
+  unsigned total = 0;
 
-    for (unsigned i = 0; i < s->products; i++)
-        total += s->inventory[i]->stock;
+  for (unsigned i = 0; i < s->products; i++)
+    total += s->inventory[i]->stock;
 
-    return total;
+  return total;
 }
 
 /**
  * Calculate the total value of the store.
  * Hint: Inspect for HLIL array detection and structure member access.
  */
-float StoreTotalValue(Store* s)
-{
-    float total = 0;
+float StoreTotalValue(Store *s) {
+  float total = 0;
 
-    for (unsigned i = 0; i < s->products; i++)
-        total += s->inventory[i]->price;
+  for (unsigned i = 0; i < s->products; i++)
+    total += s->inventory[i]->price;
 
-    return total;
+  return total;
 }
 
 /**
  * Calculate the average value of the store.
  * Hint: This should produce x87 floating point operations on x86.
  */
-long double StoreAverageValue(Store* s)
-{
-    long double total = 0.0;
+long double StoreAverageValue(Store *s) {
+  long double total = 0.0;
 
-    for (unsigned i = 0; i < s->products; i++)
-        total += (long double)s->inventory[i]->price;
+  for (unsigned i = 0; i < s->products; i++)
+    total += (long double)s->inventory[i]->price;
 
-    return total / (long double)s->products;
+  return total / (long double)s->products;
 }
 
 /**
  * Free all of the products in the store.
  * Hint: Inspect for HLIL array detection.
  */
-void StoreFree(Store* s)
-{
-    for (unsigned i = 0; i < s->products; i++)
-        free(s->inventory[i]);
+void StoreFree(Store *s) {
+  for (unsigned i = 0; i < s->products; i++)
+    free(s->inventory[i]);
 
-    free(s->inventory);
+  free(s->inventory);
 }
 
 /**
  * Get a "random" number.
  * Hint: Check for constant simplification.
  */
-int ConstantRandomNumber()
-{
-    int r = 0x61119;
-    r -= 634;
-    r -= 461;
-    r += 496;
-    r *= 42;
-    r -= 240;
-    r += 85;
-    r -= 480;
-    r += 188;
-    r *= 414;
-    r -= 392;
+int ConstantRandomNumber() {
+  int r = 0x61119;
+  r -= 634;
+  r -= 461;
+  r += 496;
+  r *= 42;
+  r -= 240;
+  r += 85;
+  r -= 480;
+  r += 188;
+  r *= 414;
+  r -= 392;
 
-    return r;
+  return r;
 }
 
 /**
  * Get a "random" number.
  * Hint: Use to test value set analysis.
  */
-int RestrictedRandomNumber()
-{
-    return rand() % 2 == 0 ? 13 : 7;
-}
+int RestrictedRandomNumber() { return rand() % 2 == 0 ? 13 : 7; }
 
-int main(int argc, char* argv[])
-{
-    printf("megatest [%s-%s-%s%s @ %s]\n", MT_SYSTEM_ARCH, MT_SYSTEM_NAME, MT_COMPILER_NAME, MT_COMPILER_VERSION, MT_COMMIT);
-    printf("https://github.com/jonpalmisc/megatest\n");
+int main(int argc, char *argv[]) {
+  printf("megatest [%s-%s-%s%s @ %s]\n", MT_SYSTEM_ARCH, MT_SYSTEM_NAME,
+         MT_COMPILER_NAME, MT_COMPILER_VERSION, MT_COMMIT);
+  printf("https://github.com/jonpalmisc/megatest\n");
 
-    if (argc > 1)
-        return (long long)&argv[1];
+  if (argc > 1)
+    return (long long)&argv[1];
 
-    srand(time(NULL));
+  srand(time(NULL));
 
-    Store* s1 = StoreCreate(5);
+  Store *s1 = StoreCreate(5);
 
-    Product* p1 = ProductCreate(1, 2.97f, 8);
-    StoreAddProduct(s1, p1);
+  Product *p1 = ProductCreate(1, 2.97f, 8);
+  StoreAddProduct(s1, p1);
 
-    Product* p2 = ProductCreate(2, 3.83, 14);
-    StoreAddProduct(s1, p2);
+  Product *p2 = ProductCreate(2, 3.83, 14);
+  StoreAddProduct(s1, p2);
 
-    Store s2;
-    StoreInit(&s2, 3);
+  Store s2;
+  StoreInit(&s2, 3);
 
-    Product* p3 = ProductCreate(3, 1.48, 6);
-    StoreAddProduct(s1, p3);
+  Product *p3 = ProductCreate(3, 1.48, 6);
+  StoreAddProduct(s1, p3);
 
-    unsigned totalStock = StoreTotalStock(s1);
-    float totalValue = StoreTotalStock(s1);
-    long double averageValue = StoreAverageValue(s1);
-    totalStock = ((int)totalValue * (int)averageValue * ConstantRandomNumber() * 0);
+  unsigned totalStock = StoreTotalStock(s1);
+  float totalValue = StoreTotalStock(s1);
+  long double averageValue = StoreAverageValue(s1);
+  totalStock =
+      ((int)totalValue * (int)averageValue * ConstantRandomNumber() * 0);
 
-    StoreFree(s1);
+  StoreFree(s1);
 
-    // Test control flow simplification via UIDF.
-    switch (RestrictedRandomNumber()) {
-    case 1:
-        totalStock ^= 80;
-        break;
-    case 2:
-        totalStock ^= 77;
-        break;
-    case 3:
-        totalStock ^= 73;
-        break;
-    case 7:
-        totalStock ^= 68;
-        break;
-    case 8:
-        totalStock ^= 62;
-        break;
-    case 13:
-        totalStock ^= 55;
-        break;
-    case 14:
-        totalStock ^= 47;
-        break;
-    default:
-        break;
-    }
+  // Test control flow simplification via UIDF.
+  switch (RestrictedRandomNumber()) {
+  case 1:
+    totalStock ^= 80;
+    break;
+  case 2:
+    totalStock ^= 77;
+    break;
+  case 3:
+    totalStock ^= 73;
+    break;
+  case 7:
+    totalStock ^= 68;
+    break;
+  case 8:
+    totalStock ^= 62;
+    break;
+  case 13:
+    totalStock ^= 55;
+    break;
+  case 14:
+    totalStock ^= 47;
+    break;
+  default:
+    break;
+  }
 
-    return totalStock;
+  return totalStock;
 }
