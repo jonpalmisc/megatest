@@ -40,55 +40,58 @@
 #include <stdlib.h>
 #include <time.h>
 
+// I probably found this on Stack Overflow; I don't completely remember why it
+// is relevant or needed, but here it is.
 #define _STR(x) #x
 #define STR(x) _STR(x)
 
-/**
- * Compiler name and version
- */
+//===-- Preprocessor abuse ------------------------------------------------===//
+
+/* Build commit */
+#ifndef MT_COMMIT
+#define MT_COMMIT "0000000"
+#endif
+
+/* Compiler name & version */
 #ifdef _MSC_VER
-#define MT_COMPILER_NAME "MSVC"
+#define MT_COMPILER_NAME "msvc"
 #define MT_COMPILER_VERSION STR(_MSC_VER)
 #elif defined(__clang__)
-#define MT_COMPILER_NAME "Clang"
-#define MT_COMPILER_VERSION \
-    STR(__clang_major__)    \
-    "." STR(__clang_minor__)
+#define MT_COMPILER_NAME "clang"
+#define MT_COMPILER_VERSION STR(__clang_major__)
 #elif defined(__GNUC__)
-#define MT_COMPILER_NAME "GCC"
-#define MT_COMPILER_VERSION \
-    STR(__GNUC__)           \
-    "." STR(__GNUC_MINOR__)
+#define MT_COMPILER_NAME "gcc"
+#define MT_COMPILER_VERSION STR(__GNUC__)
 #else
-#define MT_COMPILER_NAME "Unknown"
+#define MT_COMPILER_NAME "other"
 #define MT_COMPILER_VERSION ""
 #endif
 
-/**
- * Operating system
- */
+/* Target platform */
 #ifdef __linux__
-#define MT_SYSTEM_NAME "Linux"
+#define MT_SYSTEM_NAME "linux"
 #elif defined(__APPLE__)
-#define MT_SYSTEM_NAME "macOS"
+#define MT_SYSTEM_NAME "mac"
 #elif defined(_WIN32)
-#define MT_SYSTEM_NAME "Windows"
+#define MT_SYSTEM_NAME "win"
 #else
-#define MT_SYSTEM_NAME "Unknown"
+#define MT_SYSTEM_NAME "other"
 #endif
 
-/**
- * Processor architecture
- */
+/* Target architecture */
 #ifdef __i386__
 #define MT_SYSTEM_ARCH "x86"
 #elif defined(__x86_64__)
 #define MT_SYSTEM_ARCH "x86_64"
+#elif defined(__aarch64__)
+#define MT_SYSTEM_ARCH "arm64"
 #elif defined(__arm__)
-#define MT_SYSTEM_ARCH "ARM"
+#define MT_SYSTEM_ARCH "arm"
 #else
-#define MT_SYSTEM_ARCH "Unknown"
+#define MT_SYSTEM_ARCH "other"
 #endif
+
+//===-- Core program ------------------------------------------------------===//
 
 typedef struct {
     unsigned id;
@@ -243,22 +246,10 @@ int RestrictedRandomNumber()
     return rand() % 2 == 0 ? 13 : 7;
 }
 
-#define Echo(s) printf("%s\n", s)
-
-void PrintHeader()
-{
-    Echo("MEGATEST - Disassembler testing & demonstration binary");
-    Echo("----------------------------------------------------------------------------\n");
-    Echo("      Date:  " __DATE__ " " __TIME__);
-    Echo("  Compiler:  " MT_COMPILER_NAME " " MT_COMPILER_VERSION);
-    Echo("    System:  " MT_SYSTEM_NAME " " MT_SYSTEM_ARCH);
-    Echo("\n----------------------------------------------------------------------------");
-    Echo("Hint: This binary is meant to be viewed in a disassembler; it has no output.\n");
-}
-
 int main(int argc, char* argv[])
 {
-    PrintHeader();
+    printf("megatest [%s-%s-%s%s @ %s]\n", MT_SYSTEM_ARCH, MT_SYSTEM_NAME, MT_COMPILER_NAME, MT_COMPILER_VERSION, MT_COMMIT);
+    printf("https://github.com/jonpalmisc/megatest\n");
 
     if (argc > 1)
         return (long long)&argv[1];
@@ -289,25 +280,25 @@ int main(int argc, char* argv[])
     // Test control flow simplification via UIDF.
     switch (RestrictedRandomNumber()) {
     case 1:
-        Echo("Today's random number was 1.");
+        puts("Today's random number was 1.");
         break;
     case 2:
-        Echo("Today's random number was 2.");
+        puts("Today's random number was 2.");
         break;
     case 3:
-        Echo("Today's random number was 3.");
+        puts("Today's random number was 3.");
         break;
     case 7:
-        Echo("Today's random number was 7.");
+        puts("Today's random number was 7.");
         break;
     case 8:
-        Echo("Today's random number was 8.");
+        puts("Today's random number was 8.");
         break;
     case 13:
-        Echo("Today's random number was 13.");
+        puts("Today's random number was 13.");
         break;
     case 14:
-        Echo("Today's random number was 14.");
+        puts("Today's random number was 14.");
         break;
     default:
         break;
