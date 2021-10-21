@@ -2,7 +2,7 @@
 
 COMMIT=$(git rev-parse --short HEAD)
 
-mkdir -p build && cd build
+rm -fr build && mkdir -p build && cd build
 
 cmake -S ../ -B debug -DCMAKE_BUILD_TYPE=Debug
 cmake -S ../ -B release -DCMAKE_BUILD_TYPE=Release
