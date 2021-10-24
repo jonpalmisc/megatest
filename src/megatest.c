@@ -66,7 +66,7 @@ char *BuildInfo() {
 int main(int argc, char *argv[]) {
 #ifdef __APPLE__
   char *buildInfo = MTCoreBuildInfo();
-#elif
+#else
   char *buildInfo = BuildInfo();
 #endif
 
