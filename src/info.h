@@ -62,6 +62,8 @@
 #define MT_SYSTEM_NAME "mac"
 #elif defined(_WIN32)
 #define MT_SYSTEM_NAME "win"
+#elif define(__FreeBSD__)
+#define MT_SYSTEM_NAME "freebsd"
 #else
 #define MT_SYSTEM_NAME "other"
 #endif
