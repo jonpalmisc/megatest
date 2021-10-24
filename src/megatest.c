@@ -1,10 +1,5 @@
 //===-- megatest.c - Disassembler testing & demonstration binary ----------===//
 //
-// MEGATEST is a small test binary that is useful for demonstrating existing
-// disassembler features and serving as a test case while developing new ones.
-//
-//===----------------------------------------------------------------------===//
-//
 // Copyright (c) 2021 Jon Palmisciano
 //
 // Redistribution and use in source and binary forms, with or without
@@ -35,181 +30,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <stdbool.h>
+#include "megatest.h"
+#include "info.h"
+#include "store.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-//===-- Preprocessor abuse ------------------------------------------------===//
-
-#define _STR(x) #x
-#define STR(x) _STR(x)
-
-/* Build commit */
-#ifndef MT_COMMIT
-#define MT_COMMIT "0000000"
-#endif
-
-/* Compiler name & version */
-#ifdef _MSC_VER
-#define MT_COMPILER_NAME "msvc"
-#define MT_COMPILER_VERSION STR(_MSC_VER)
-#elif defined(__clang__)
-#define MT_COMPILER_NAME "clang"
-#define MT_COMPILER_VERSION STR(__clang_major__)
-#elif defined(__GNUC__)
-#define MT_COMPILER_NAME "gcc"
-#define MT_COMPILER_VERSION STR(__GNUC__)
-#else
-#define MT_COMPILER_NAME "other"
-#define MT_COMPILER_VERSION ""
-#endif
-
-/* Target platform */
-#ifdef __linux__
-#define MT_SYSTEM_NAME "linux"
-#elif defined(__APPLE__)
-#define MT_SYSTEM_NAME "mac"
-#elif defined(_WIN32)
-#define MT_SYSTEM_NAME "win"
-#else
-#define MT_SYSTEM_NAME "other"
-#endif
-
-/* Target architecture */
-#ifdef __i386__
-#define MT_SYSTEM_ARCH "x86"
-#elif defined(__x86_64__)
-#define MT_SYSTEM_ARCH "x86_64"
-#elif defined(__aarch64__)
-#define MT_SYSTEM_ARCH "arm64"
-#elif defined(__arm__)
-#define MT_SYSTEM_ARCH "arm"
-#else
-#define MT_SYSTEM_ARCH "other"
-#endif
-
-//===-- Core program ------------------------------------------------------===//
-
-typedef struct {
-  unsigned id;
-  float price;
-  unsigned stock;
-} Product;
-
-typedef struct {
-  char *name;
-  unsigned products;
-  unsigned capacity;
-  Product **inventory;
-} Store;
-
-/**
- * Allocate and initialize a new Product instance.
- * Hint: Inspect for proper structure representation.
- */
-Product *ProductCreate(unsigned id, float price, unsigned stock) {
-  Product *p = (Product *)malloc(sizeof(Product));
-
-  p->id = id;
-  p->price = price;
-  p->stock = stock;
-
-  return p;
-}
-
-/**
- * Allocate and initialize a new Store instance.
- * Hint: Inspect for proper structure representation.
- */
-Store *StoreCreate(unsigned productLimit) {
-  Store *s = (Store *)malloc(sizeof(Store));
-
-  s->name = "Untitled Store";
-  s->products = 0;
-  s->capacity = productLimit;
-  s->inventory = (Product **)malloc(s->capacity * sizeof(Product *));
-
-  return s;
-}
-
-/**
- * Initialize an already-allocated Store instance.
- * Hint: Inspect for proper structure representation.
- */
-void StoreInit(Store *s, unsigned productLimit) {
-  s->name = "Untitled Store";
-  s->products = 0;
-  s->capacity = productLimit;
-  s->inventory = (Product **)malloc(s->capacity * sizeof(Product *));
-}
-
-/**
- * Add a product to the store's inventory.
- * Hint: Inspect for HLIL array detection and structure member access.
- */
-bool StoreAddProduct(Store *s, Product *p) {
-  if (s->products >= s->capacity)
-    return false;
-
-  s->inventory[s->products++] = p;
-  return true;
-}
-
-/**
- * Calculate the total stock of the store.
- * Hint: Inspect for HLIL array detection and structure member access.
- */
-unsigned StoreTotalStock(Store *s) {
-  unsigned total = 0;
-
-  for (unsigned i = 0; i < s->products; i++)
-    total += s->inventory[i]->stock;
-
-  return total;
-}
-
-/**
- * Calculate the total value of the store.
- * Hint: Inspect for HLIL array detection and structure member access.
- */
-float StoreTotalValue(Store *s) {
-  float total = 0;
-
-  for (unsigned i = 0; i < s->products; i++)
-    total += s->inventory[i]->price;
-
-  return total;
-}
-
-/**
- * Calculate the average value of the store.
- * Hint: This should produce x87 floating point operations on x86.
- */
-long double StoreAverageValue(Store *s) {
-  long double total = 0.0;
-
-  for (unsigned i = 0; i < s->products; i++)
-    total += (long double)s->inventory[i]->price;
-
-  return total / (long double)s->products;
-}
-
-/**
- * Free all of the products in the store.
- * Hint: Inspect for HLIL array detection.
- */
-void StoreFree(Store *s) {
-  for (unsigned i = 0; i < s->products; i++)
-    free(s->inventory[i]);
-
-  free(s->inventory);
-}
-
-/**
- * Get a "random" number.
- * Hint: Check for constant simplification.
- */
+// Check for constant simplification.
 int ConstantRandomNumber() {
   int r = 0x61119;
   r -= 634;
@@ -226,15 +55,22 @@ int ConstantRandomNumber() {
   return r;
 }
 
-/**
- * Get a "random" number.
- * Hint: Use to test value set analysis.
- */
+// Use to test value set analysis.
 int RestrictedRandomNumber() { return rand() % 2 == 0 ? 13 : 7; }
 
+char *BuildInfo() {
+  return MT_SYSTEM_ARCH "-" MT_SYSTEM_NAME
+                        "-" MT_COMPILER_NAME MT_COMPILER_VERSION;
+}
+
 int main(int argc, char *argv[]) {
-  printf("megatest [%s-%s-%s%s @ %s]\n", MT_SYSTEM_ARCH, MT_SYSTEM_NAME,
-         MT_COMPILER_NAME, MT_COMPILER_VERSION, MT_COMMIT);
+#ifdef __APPLE__
+  char *buildInfo = MTCoreBuildInfo();
+#elif
+  char *buildInfo = BuildInfo();
+#endif
+
+  printf("megatest [%s @ %s]\n", buildInfo, MT_COMMIT);
   printf("https://github.com/jonpalmisc/megatest\n");
 
   if (argc > 1)
