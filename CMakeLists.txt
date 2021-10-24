@@ -29,3 +29,6 @@ if(MSVC)
 else()
   target_compile_options(megatest PRIVATE -Wall -Wextra -fno-inline)
 endif()
+
+add_custom_target(format WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMAND clang-format -i --style=LLVM ${MT_SOURCE})
